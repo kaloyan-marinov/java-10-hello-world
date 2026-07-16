@@ -13,6 +13,11 @@ OS name: "mac os x", version: "15.7.4", arch: "aarch64", family: "mac"
 ```
 
 
+
+---
+
+
+
 ```shell
 $ mvn package
 # ...
@@ -29,6 +34,10 @@ $ mvn package
 [INFO] ------------------------------------------------------------------------
 ```
 (for now, you can ignore the `[WARNING]`)
+
+
+
+---
 
 
 
@@ -64,3 +73,89 @@ or) Use another terminal window to issue the following HTTP request:
 $ curl localhost:8080
 Hello World!
 ```
+
+
+
+---
+
+
+
+[Create] a completely self-contained executable JAR file that we could run in production. Executable JARs (sometimes called “uber JARs” or “fat JARs”) are archives containing your compiled classes along with all of the JAR dependencies that your code needs to run.
+
+> [Executable JARs and Java]
+> 
+> Java does not provide a standard way to load nested JAR files
+> (JAR files that are themselves contained within a JAR).
+> - This can be problematic if you are looking to distribute a self-contained application.
+> 
+> To solve this problem, many developers use “uber” JARs.
+> An uber JAR packages all the classes from all the application’s dependencies into a single archive.
+> - The problem with this approach is that it becomes hard to see which libraries are in your application.
+> - It can also be problematic if the same filename is used (but with different content) in multiple JARs.
+> 
+> Spring Boot takes a [different approach](
+>   https://docs.spring.io/spring-boot/specification/executable-jar/index.html
+> ) and lets you actually nest JARs directly.
+
+```shell
+$ mvn package
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< com.github:tutorial-about-java-10 >------------------
+[INFO] Building tutorial-about-java-10 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ tutorial-about-java-10 ---
+[INFO] skip non existing resourceDirectory <path-to>/tutorial-about-java-10/src/main/resources
+[INFO] skip non existing resourceDirectory <path-to>/tutorial-about-java-10/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ tutorial-about-java-10 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ tutorial-about-java-10 ---
+[INFO] skip non existing resourceDirectory <path-to>/tutorial-about-java-10/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ tutorial-about-java-10 ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ tutorial-about-java-10 ---
+[INFO] 
+[INFO] --- jar:3.5.0:jar (default-jar) @ tutorial-about-java-10 ---
+[INFO] Building jar: <path-to>/tutorial-about-java-10/target/tutorial-about-java-10-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.0:repackage (repackage) @ tutorial-about-java-10 ---
+[INFO] Replacing main artifact <path-to>/tutorial-about-java-10/target/tutorial-about-java-10-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to <path-to>/tutorial-about-java-10/target/tutorial-about-java-10-0.0.1-SNAPSHOT.jar.original
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.769 s
+[INFO] Finished at: 2026-07-16T22:29:36+02:00
+[INFO] ------------------------------------------------------------------------
+
+
+
+$ ls target/tutorial-about-java-10-0.0.1-SNAPSHOT.jar  
+target/tutorial-about-java-10-0.0.1-SNAPSHOT.jar
+$ du -sh target/tutorial-about-java-10-0.0.1-SNAPSHOT.jar
+ 19M    target/tutorial-about-java-10-0.0.1-SNAPSHOT.jar
+```
+
+> If you want to peek inside, you can use ...
+> ```shell
+> $ jar tvf target/myproject-0.0.1-SNAPSHOT.jar
+> ```
+> You should also see
+> a much smaller file named `tutorial-about-java-10-0.0.1-SNAPSHOT.jar.original`
+> in the `target` directory.
+> This is the original jar file that Maven created
+> before it was repackaged by Spring Boot.
+
+To run that application:
+```
+$ java \
+    -jar target/tutorial-about-java-10-0.0.1-SNAPSHOT.jar
+```
+
+Issue the above-mentioned HTTP request (either via a web browser or via `curl`).

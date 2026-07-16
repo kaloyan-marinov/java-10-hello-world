@@ -18,4 +18,19 @@
         </dependency>
     </dependencies>
 
+    <!--
+    The `spring-boot-starter-parent` POM includes `<executions>` configuration to bind the `repackage` goal.
+    If you do not use the parent POM, you need to declare this configuration yourself.
+    See the [plugin documentation](
+        https://docs.spring.io/spring-boot/maven-plugin/getting-started.html
+    ) for details.
+    -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
