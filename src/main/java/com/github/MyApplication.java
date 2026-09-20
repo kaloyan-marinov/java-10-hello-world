@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
-This is known as a «stereotype» annotation.
+This is known as a «stereotype annotation».
 It provides hints for people reading the code and for Spring
 that the class plays a specific role.
 In this case... a web `@Controller`, so Spring considers it when handling incoming web requests.
 */
 @RestController
 /*
-This annotation is known as a «meta-annotation», it combines
+This annotation is known as a «composed annotation», it combines
 `@SpringBootConfiguration`,
 `@EnableAutoConfiguration` and 
 `@ComponentScan`.
